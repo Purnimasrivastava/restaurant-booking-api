@@ -1,4 +1,4 @@
-# Restaurant Booking
+# Restaurant Booking APIs
 
 Welcome to the Restaurant Booking project! This application allows users to search for restaurants by name or dishes, view restaurant details and menus, add dishes to their cart, and calculate tax and bill for checkout. Below are the details and instructions for running the project.
 
