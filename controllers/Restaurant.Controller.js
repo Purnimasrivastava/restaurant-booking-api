@@ -13,7 +13,7 @@ const Dishes = db.dishes;
 const Op = db.Sequelize.Op;
 
 // Create and save new Restaurants
-exports.create = (request, result) => {
+exports.create = async (request, result) => {
     if (!request.body.name || !request.body.address ) {
         result.status(400).send({
             message: "Restaurant name and address can not be empt"
@@ -26,15 +26,18 @@ exports.create = (request, result) => {
         address: request.body.address,
         ...(request.body.ratings && {ratings: request.body.ratings}),
     };
+    const restaurant = await Restaurants.create(data);
 
-    // Save Restaurants object to db
-    Restaurants.create(data).then(data => {
-        result.send(data);
-    }).catch(err => {
-        result.status(500).send({
-            message: err.message || "Some error occurred while saving."
-        });
-    });
+    if(request.body?.dishes){
+        await Promise.all(request.body.dishes.map(async (dish)=>{
+            await Dishes.create({
+                name: dish.name,
+                price: dish.price,
+                restaurant_id: restaurant.restaurant_id
+            })
+        }));
+    }
+    result.send(restaurant);
 };
 
 // Retrieve all Restaurants (Receive data with condition).
