@@ -28,7 +28,7 @@ exports.create = async (request, result) => {
     };
     const restaurant = await Restaurants.create(data);
 
-    if(request.body?.dishes){
+    if(request.body?.dishes && restaurant){
         await Promise.all(request.body.dishes.map(async (dish)=>{
             await Dishes.create({
                 name: dish.name,
